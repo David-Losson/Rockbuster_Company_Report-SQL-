@@ -1,0 +1,41 @@
+SQL Query with Common Table Expression (CTE)
+Used for finding how many of the top 5 customers are based in each country.
+
+WITH cte_top_customer_count (customer_id, first_name, last_name, city, country, total_amount_paid) AS
+    (SELECT B.customer_id, B.first_name, B.last_name, D.city, E.country,
+        SUM(A.amount) AS total_amount_paid 
+        FROM payment A 
+        INNER JOIN customer B on A.customer_id=B.customer_id 
+        INNER JOIN address C on B.address_id=C.address_id 
+        INNER JOIN city D on C.city_id=D.city_id 
+        INNER JOIN country E on D.country_id=E.country_id
+      WHERE city  IN ('Aurora', 'Atlixco', 'Xintai', 'Adoni', 'Dhule (Dhulia)', 'Kurashiki', 'Pingxiang', 'Sivas', 'Celaya', 'So Leopoldo') 
+      GROUP BY B.customer_id, B.first_name, B.last_name, D.city, E.country 
+          ORDER BY total_amount_paid DESC
+          LIMIT 5), 
+          
+     cte_all_customer_count AS 
+        (SELECT E.country, 
+        COUNT(DISTINCT B.customer_id) AS all_customer_count, B.address_id SELECT E.country, 
+        COUNT(DISTINCT E.country) AS top_customer_count 
+        
+  FROM country E 
+  INNER JOIN city D ON E.country_id = D.country_id 
+  INNER JOIN address C ON D.city_id = C.city_id 
+  INNER JOIN customer B ON C.address_id = B.address_id 
+  LEFT JOIN (SELECT B.customer_id, B.first_name, B.last_name, D.city, E.country, 
+             SUM(A.amount) AS total_amount_paid 
+             FROM payment A 
+             INNER JOIN customer B on A.customer_id=B.customer_id 
+             INNER JOIN address C on B.address_id=C.address_id 
+             INNER JOIN city D on C.city_id=D.city_id 
+             INNER JOIN country E on D.country_id=E.country_id 
+           WHERE city IN ('Aurora', 'Atlixco', 'Xintai', 'Adoni', 'Dhule (Dhulia)','Kurashiki', 'Pingxiang', 'Sivas', 'Celaya', 'So Leopoldo')
+           GROUP BY B.customer_id, B.first_name, B.last_name, D.city, E.country 
+              ORDER BY total_amount_paid DESC LIMIT 5) 
+              AS cte_top_customer_count 
+              ON E.country=cte_top_customer_count.country
+  
+  GROUP BY E.country 
+  ORDER BY top_customer_count DESC 
+  LIMIT 5
