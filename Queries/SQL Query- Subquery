@@ -2,11 +2,11 @@ SUBQUERIES
 Used to find total amount paid by top 10 customers in the top cities for sales.
 
 SELECT  B.customer_id AS Customer_ID,
-		B.first_name AS Customer_First_Name,
-		B.last_name AS Customer_Last_Name,
-		D.city AS City,
-		E.country AS Country,
-		SUM(A.amount) AS Total_Amount_Paid
+	B.first_name AS Customer_First_Name,
+	B.last_name AS Customer_Last_Name,
+	D.city AS City,
+	E.country AS Country,
+	SUM(A.amount) AS Total_Amount_Paid
 FROM payment A
 INNER JOIN customer B on A.customer_id=B.customer_id
 INNER JOIN address C on B.address_id=B.address_id
