@@ -1,4 +1,4 @@
-SUBQUERIES
+Queries With Multiple Joins
 Used to find total amount paid by top 10 customers in the top cities for sales.
 
 SELECT  B.customer_id AS Customer_ID,
